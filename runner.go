@@ -18,7 +18,7 @@ type runResponse struct {
 }
 
 func handleRunRequest(c *fiber.Ctx) error {
-	ctx, span := tracer.Start(context.Background(), "Handle run request")
+	ctx, span := tracer.Start(c.UserContext(), "Handle run request")
 	defer span.End()
 
 	if len(NEXT_NODE) < 1 {
@@ -52,7 +52,7 @@ func handleRunRequest(c *fiber.Ctx) error {
 }
 
 func chooseNextNode(ctx context.Context) string {
-	_, span := tracer.Start(ctx, "Choose next node from list")
+	_, span := tracer.Start(ctx, "Choose next node from list - "+NODE_NAME)
 	defer span.End()
 
 	nextNodes := strings.Split(NEXT_NODE, ",")

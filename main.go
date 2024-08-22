@@ -3,9 +3,7 @@ package main
 import (
 	"context"
 	"log"
-	"math/rand"
 	"os"
-	"time"
 
 	"github.com/gofiber/contrib/otelfiber/v2"
 	"github.com/gofiber/fiber/v2"
@@ -26,8 +24,6 @@ func init() {
 	NODE_NAME = nodeName
 	NEXT_NODE = os.Getenv("NEXT_NODE")
 	tracer = otel.Tracer(NODE_NAME)
-
-	rand.Seed(time.Now().UTC().UnixNano())
 }
 
 func main() {
@@ -40,7 +36,13 @@ func main() {
 	}()
 
 	app := fiber.New()
-	app.Use(otelfiber.Middleware())
+	app.Use(otelfiber.Middleware(
+		otelfiber.WithPort(3000),
+		otelfiber.WithServerName(NODE_NAME),
+		otelfiber.WithNext(func(ctx *fiber.Ctx) bool {
+			return ctx.Path() == "/healthz"
+		}),
+	))
 
 	app.Get("/healthz", func(c *fiber.Ctx) error {
 		c.JSON(fiber.Map{
