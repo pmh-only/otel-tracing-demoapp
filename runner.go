@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"strings"
 
@@ -21,8 +20,6 @@ type runResponse struct {
 func handleRunRequest(c *fiber.Ctx) error {
 	ctx, span := tracer.Start(c.UserContext(), "Handle run request")
 	defer span.End()
-
-	log.Println(c.GetReqHeaders())
 
 	if len(NEXT_NODE) < 1 {
 		c.JSON(fiber.Map{
