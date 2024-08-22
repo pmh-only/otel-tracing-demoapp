@@ -15,7 +15,6 @@ func initTracer() *trace.TracerProvider {
 	traceExporter, err := otlptracegrpc.New(
 		context.Background(),
 		otlptracegrpc.WithInsecure(),
-		otlptracegrpc.WithEndpoint("0.0.0.0:4317"),
 		otlptracegrpc.WithDialOption(grpc.WithBlock()),
 	)
 
