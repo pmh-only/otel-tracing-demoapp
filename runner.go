@@ -36,7 +36,7 @@ func handleRunRequest(c *fiber.Ctx) error {
 	parsedResponse := parseNodeResponse(ctx, nodeResponse)
 
 	if !parsedResponse.Success || parsedResponse.TracedNodes == nil {
-		c.JSON(fiber.Map{
+		c.Status(500).JSON(fiber.Map{
 			"success": false,
 		})
 		return nil
