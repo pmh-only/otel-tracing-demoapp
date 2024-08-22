@@ -17,7 +17,7 @@ RUN go build -o ./otel_tracing_demoapp .
 RUN chmod 500 ./otel_tracing_demoapp
 RUN chown 1000:1000 ./otel_tracing_demoapp
 
-FROM scratch
+FROM alpine
 
 WORKDIR /app
 
