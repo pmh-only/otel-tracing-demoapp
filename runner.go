@@ -73,11 +73,16 @@ func chooseNextNode(ctx context.Context) string {
 }
 
 func requestToNode(ctx context.Context, node string) []byte {
-	_, span := tracer.Start(ctx, "HTTP request to next node")
+	c, span := tracer.Start(ctx, "HTTP request to next node")
 	defer span.End()
 
 	nodeUrl := fmt.Sprintf("http://%s/api/v1/run", node)
-	resp, err := http.Get(nodeUrl)
+	req, err := http.NewRequestWithContext(c, "GET", nodeUrl, nil)
+	if err != nil {
+		return []byte("{\"success\":false}")
+	}
+
+	resp, err := client.Do(req)
 	if err != nil {
 		return []byte("{\"success\":false}")
 	}
